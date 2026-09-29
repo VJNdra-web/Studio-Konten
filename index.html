@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio Konten</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f0fa;--card:#fff;--ink:#1e1b3a;--mut:#6b6889;--line:#dcd8ee;--acc:#5b3df5;--acc2:#ff5c8a;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15132a;--card:#1f1c3d;--ink:#eeecff;--mut:#a09dc4;--line:#34305e;--acc:#8b74ff;--acc2:#ff7aa2}}
+:root[data-theme="dark"]{--bg:#15132a;--card:#1f1c3d;--ink:#eeecff;--mut:#a09dc4;--line:#34305e;--acc:#8b74ff;--acc2:#ff7aa2}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif;max-width:720px;margin-inline:auto;padding:0 14px 40px}
+h1{font-size:1.7rem;font-weight:800;margin:18px 0 2px;letter-spacing:-.02em}
+h2{font-size:1.05rem;margin:22px 0 8px}
+p.s{color:var(--mut);margin:0 0 12px;font-size:.92rem}
+nav{display:flex;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
+nav button{flex:1}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 12px;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+button[aria-pressed="true"],nav button.on{background:var(--acc);border-color:var(--acc);color:var(--on)}
+button.go{background:var(--acc2);border-color:var(--acc2);color:#fff;font-weight:800;width:100%;padding:14px;font-size:1.05rem;margin-top:16px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:600;font-size:.9rem;margin:10px 0 5px}
+input,select,textarea{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 10px}
+textarea{min-height:84px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{padding:7px 11px;font-size:.9rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc h3{margin:0 0 4px;font-size:1rem}
+.sc small{color:var(--mut)}
+.blk{background:var(--bg);border-radius:10px;padding:9px 10px;margin:7px 0;font-size:.9rem;white-space:pre-wrap;word-break:break-word}
+.blk b{display:block;font-size:.8rem;color:var(--acc);margin-bottom:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sm{padding:5px 10px;font-size:.82rem}
+.hide{display:none}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .h{text-align:center;font-size:.75rem;color:var(--mut)}
+.cal button{min-height:58px;padding:4px;border-radius:9px;text-align:left;font-size:.72rem;line-height:1.2;overflow:hidden;display:flex;flex-direction:column}
+.cal button b{font-size:.85rem}
+.cal .ai{border-color:var(--acc2);background:color-mix(in srgb,var(--acc2) 14%,var(--card))}
+.cal .fl{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,var(--card))}
+.cal button[aria-current="date"]{outline:2px solid var(--ink)}
+.cal button.sel{outline:3px solid var(--acc2)}
+.lg{display:flex;gap:12px;font-size:.82rem;color:var(--mut);margin:8px 0}
+.lg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.ph{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ph div{position:relative;width:84px;height:84px;border-radius:10px;overflow:hidden;border:1.5px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph button{position:absolute;top:2px;right:2px;padding:0 7px;font-size:.9rem;line-height:1.5;border-radius:8px}
+.up{display:block;text-align:center;border:1.5px dashed var(--acc);border-radius:12px;padding:12px;cursor:pointer;color:var(--acc);font-weight:600}
+.up input{display:none}
+.rf{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.rf img{width:72px;height:72px;object-fit:cover;border-radius:8px}
+</style>
+</head>
+<body>
+<h1>Studio Konten</h1>
+<p class="s">Isi konsep, pilih elemen, dapat storyboard + prompt video + jadwal posting.</p>
+<nav role="tablist">
+<button class="on" data-t="buat">Buat</button><button data-t="hasil">Hasil</button><button data-t="kal">Kalender</button>
+</nav>
+
+<section id="buat">
+<div class="card">
+<label for="concept">Konsep konten</label>
+<textarea id="concept" placeholder="Contoh: Ring light mini murah untuk foto produk, hasilnya seperti studio"></textarea>
+<div class="two">
+<div style="grid-column:1/-1"><label for="prod">Nama produk</label><input id="prod" placeholder="Ring light mini 10 inci"></div>
+</div>
+</div>
+
+<h2>Karakter</h2>
+<div class="card">
+<div class="chips" id="c-mode"></div>
+<div id="c-list" class="chips" style="margin-top:10px"></div>
+<div id="ai-box" class="hide">
+<div class="two">
+<div><label for="aiName">Nama karakter</label><input id="aiName" value="Ndra"></div>
+<div><label for="aiLook">Ciri wajah / outfit</label><input id="aiLook" placeholder="kaos hitam, rambut pendek, kacamata"></div>
+</div>
+<label style="margin-top:12px">Foto model (wajahmu)</label>
+<label class="up" for="fModel"><input id="fModel" type="file" accept="image/*" multiple>Unggah foto model (maks 3: depan, samping, senyum)</label>
+<div class="ph" id="pModel"></div>
+<p class="s" style="margin-top:8px">Pakai foto dirimu sendiri. Foto tetap di HP-mu dan tidak dikirim ke mana pun; tempel lagi ke tool video AI sebagai referensi wajah.</p>
+</div>
+</div>
+
+<h2>Objek</h2>
+<div class="card"><div class="chips" id="o-list"></div>
+<label class="up" for="fProd" style="margin-top:12px"><input id="fProd" type="file" accept="image/*" multiple>Unggah foto produk (maks 3)</label>
+<div class="ph" id="pProd"></div>
+<label for="objx">Detail objek (opsional)</label><input id="objx" placeholder="warna hitam, ada tripod, dalam kotak"></div>
+
+<h2>Lokasi</h2>
+<div class="card"><div class="chips" id="l-list"></div>
+<label for="locx">Detail lokasi (opsional)</label><input id="locx" placeholder="cahaya jendela pagi, tanaman kecil di meja"></div>
+
+<h2>Suara</h2>
+<div class="card">
+<label>Suara aktor</label><div class="chips" id="v-list"></div>
+<div class="two">
+<div><label for="lang">Gaya bahasa</label><select id="lang"><option>Santai</option><option>Gaul</option><option>Formal</option><option>Storytelling</option></select></div>
+<div><label for="spd">Kecepatan bicara</label><select id="spd"><option>Normal</option><option>Cepat (energik)</option><option>Pelan (tenang)</option></select></div>
+</div>
+<label>Musik latar</label><div class="chips" id="b-list"></div>
+<label>Efek suara (bisa pilih banyak)</label><div class="chips" id="x-list"></div>
+</div>
+
+<h2>Gaya video</h2>
+<div class="card">
+<div class="chips" id="s-list"></div>
+<label>Rasio (sesuai medsos)</label><div class="chips" id="r-list"></div>
+<label>Durasi</label><div class="chips" id="d-list"></div>
+</div>
+<button class="go" id="gen">Buat storyboard &amp; prompt</button>
+<p id="err" class="s" role="alert"></p>
+</section>
+
+<section id="hasil" class="hide"><p class="s">Belum ada hasil. Isi konsep di tab Buat.</p></section>
+
+<section id="kal" class="hide">
+<div class="card">
+<div class="row" style="justify-content:space-between"><button class="sm" id="prev" aria-label="Bulan sebelumnya">‹</button><b id="mon"></b><button class="sm" id="next" aria-label="Bulan berikutnya">›</button></div>
+<div class="lg"><span><i style="background:var(--acc)"></i>Faceless</span><span><i style="background:var(--acc2)"></i>AI influencer</span></div>
+<div class="cal" id="grid"></div>
+</div>
+<div class="card">
+<b>Pola otomatis</b>
+<div class="two">
+<div><label for="every">AI influencer tiap … hari</label><input id="every" type="number" min="2" max="7" value="2"></div>
+<div><label for="start">Mulai tanggal</label><input id="start" type="date"></div>
+</div>
+<button id="auto" style="margin-top:10px;width:100%">Isi bulan ini dengan pola</button>
+<button id="csvC" style="margin-top:8px;width:100%">Unduh jadwal (CSV untuk worksheet)</button>
+</div>
+<div class="card hide" id="ed">
+<b id="edDate"></b>
+<div class="two">
+<div><label for="edType">Tipe</label><select id="edType"><option value="fl">Faceless</option><option value="ai">AI influencer</option></select></div>
+<div><label for="edTime">Jam posting</label><input id="edTime" type="time" value="19:00"></div>
+</div>
+<label for="edTitle">Judul / konsep</label><input id="edTitle">
+<div class="row" style="margin-top:10px"><button id="edSave" class="sm" style="background:var(--acc);color:#fff">Simpan</button><button id="edLast" class="sm">Pakai konsep terakhir</button><button id="edDel" class="sm">Hapus</button></div>
+</div>
+</section>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const O={
+faceless:[["Tangan + produk","only hands holding the product, no face visible"],["POV first-person","first-person POV shot, no face shown"],["Flat lay tanpa orang","top-down flat lay, no people"],["Punggung/siluet","person seen from behind, face never shown"],["Voice-over + b-roll","cinematic b-roll of the product, no people"]],
+ai:[["Kreator santai","casual friendly Indonesian content creator, natural smile"],["Reviewer rapi","neat confident Indonesian product reviewer in clean shirt"],["Outdoor / gowes","active Indonesian creator in outdoor cycling outfit"]],
+obj:[["Gadget","gadget"],["Aksesoris kreator","creator accessory"],["Makanan / jajanan","local food snack"],["Perawatan","personal care product"],["Rumah tangga","home item"],["Fashion","fashion item"]],
+loc:[["Meja kerja","tidy desk setup"],["Dapur","home kitchen"],["Kafe","cozy cafe"],["Taman / outdoor","sunny park outdoors"],["Studio polos","plain seamless studio backdrop"],["Pasar / jajan","busy local market stall"],["Kamar","bedroom with soft light"],["Jalan / gowes","city street bike route"]],
+vo:[["Pria santai","relaxed young male voice"],["Wanita ceria","cheerful female voice"],["Pria narator","deep male narrator"],["Wanita lembut","soft calm female voice"],["Suara sendiri","my own recorded voice"],["Tanpa suara","no voice, on-screen text only"]],
+bgm:[["Lo-fi chill","lo-fi chill beat"],["Upbeat pop","upbeat pop"],["Cinematic lembut","soft cinematic"],["Trending viral","current trending audio"],["Akustik","light acoustic guitar"]],
+sfx:[["Pop klik","pop click"],["Whoosh","whoosh transition"],["Ding kasir","cash register ding"],["ASMR tekstur","ASMR texture sounds"],["Tawa ringan","light laugh"]],
+sty:[["Realistis sinematik","photorealistic cinematic, shallow depth of field"],["UGC handheld","authentic UGC handheld phone look"],["Minimalis bersih","clean minimal bright aesthetic"],["Warna pop","vibrant pop colors, punchy contrast"]],
+rat:[["9:16 · Reels, TikTok, Shorts, Story","9:16"],["4:5 · Feed Instagram","4:5"],["1:1 · Feed persegi, marketplace","1:1"],["16:9 · YouTube, Facebook, X","16:9"],["2:3 · Pinterest","2:3"]],
+dur:[["15 detik",3],["30 detik",5],["45 detik",6]]};
+let SAVED={};try{SAVED=JSON.parse(localStorage.getItem("sk_state")||"{}")}catch(e){}
+const S={mode:"faceless",char:0,obj:0,loc:0,vo:0,bgm:0,sfx:[0],sty:0,rat:0,dur:1};
+if(SAVED.S)Object.assign(S,SAVED.S);
+function chips(id,list,key,multi){
+ const el=$(id);el.innerHTML="";
+ list.forEach((o,i)=>{const b=document.createElement("button");b.textContent=o[0];
+  const on=()=>multi?S[key].includes(i):S[key]===i;
+  b.setAttribute("aria-pressed",on());
+  b.onclick=()=>{if(multi){S[key]=on()?S[key].filter(x=>x!==i):[...S[key],i]}else{S[key]=i}
+   [...el.children].forEach((c,j)=>c.setAttribute("aria-pressed",multi?S[key].includes(j):S[key]===j));};
+  el.appendChild(b);});
+}
+function drawChar(){
+ const m=$("#c-mode");m.innerHTML="";
+ [["faceless","Faceless"],["ai","AI influencer (aku)"]].forEach(([k,l])=>{const b=document.createElement("button");b.textContent=l;b.setAttribute("aria-pressed",S.mode===k);
+  b.onclick=()=>{S.mode=k;S.char=0;drawChar()};m.appendChild(b)});
+ $("#ai-box").classList.toggle("hide",S.mode!=="ai");
+ chips("#c-list",O[S.mode],"char");
+}
+drawChar();
+chips("#o-list",O.obj,"obj");chips("#l-list",O.loc,"loc");chips("#v-list",O.vo,"vo");
+chips("#b-list",O.bgm,"bgm");chips("#x-list",O.sfx,"sfx",true);chips("#s-list",O.sty,"sty");chips("#r-list",O.rat,"rat");chips("#d-list",O.dur,"dur");
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+ ["buat","hasil","kal"].forEach(id=>$("#"+id).classList.toggle("hide",id!==b.dataset.t));
+ if(b.dataset.t==="kal")drawCal();
+ scrollTo(0,0);
+});
+const go=t=>document.querySelector(`nav button[data-t="${t}"]`).click();
+
+
+/* Upload foto */
+const IMG={model:[],prod:[]};
+function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=720,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.82))};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
+function drawPh(k,box){
+ const el=$(box);el.innerHTML="";
+ IMG[k].forEach((u,i)=>{const d=document.createElement("div");d.innerHTML=`<img src="${u}" alt="Foto ${k==="model"?"model":"produk"} ${i+1}"><button aria-label="Hapus foto">×</button>`;
+  d.querySelector("button").onclick=()=>{IMG[k].splice(i,1);drawPh(k,box)};el.appendChild(d)});
+ if(window.__l)window.__l();
+}
+[["#fModel","model","#pModel"],["#fProd","prod","#pProd"]].forEach(([inp,k,box])=>{
+ $(inp).onchange=async e=>{
+  for(const f of [...e.target.files]){if(IMG[k].length>=3)break;const u=await shrink(f);if(u)IMG[k].push(u)}
+  e.target.value="";drawPh(k,box);
+ };
+});
+
+const csv=async(name,rows)=>{
+ const data="\ufeff"+rows.map(r=>r.map(c=>'"'+String(c??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ try{const d=await claude.use("downloads");if(d){await d.save({filename:name,data});return}}catch(e){}
+ try{await navigator.clipboard.writeText(data);alert("Unduhan tidak tersedia di sini. Data CSV sudah disalin; tempel ke Google Sheets atau Excel.")}catch(e){alert("Unduhan tidak tersedia di sini.")}
+};
+let last="";
+const cams=["macro close-up, slow push-in","medium shot, handheld","top-down, smooth slide","low angle, slow tilt up","over-the-shoulder","wide shot, slow dolly-out"];
+function build(quiet){
+ const C=$("#concept").value.trim();
+ if(!C){$("#err").textContent="Isi konsep dulu ya.";return}
+ $("#err").textContent="";last=C;
+ const P=$("#prod").value.trim()||"produk ini";
+ const ai=S.mode==="ai",ch=O[S.mode][S.char];
+ const name=$("#aiName").value.trim()||"Ndra",look=$("#aiLook").value.trim();
+ const who=ai?`${name}, ${ch[1]}${look?", "+look:""}, same face as the uploaded model reference photo${IMG.model.length?"":" (add one)"}, consistent identity, realistic skin`:ch[1];
+ const obj=`${P} (${O.obj[S.obj][1]}${IMG.prod.length?", match the uploaded product reference photo exactly":""})${$("#objx").value.trim()?", "+$("#objx").value.trim():""}`;
+ const loc=`${O.loc[S.loc][1]}${$("#locx").value.trim()?", "+$("#locx").value.trim():""}`;
+ const sty=O.sty[S.sty][1],voc=O.vo[S.vo],mu=O.bgm[S.bgm],fx=S.sfx.map(i=>O.sfx[i]);
+ const n=O.dur[S.dur][1],secs=parseInt(O.dur[S.dur][0]),per=Math.round(secs/n);
+ const idx={3:[0,2,5],5:[0,1,2,3,5],6:[0,1,2,3,4,5]}[n];
+ const T=[
+ ["Hook",`Stop scroll dulu! ${C}`,"eye-catching first frame, fast motion"],
+ ["Masalah",`Pernah nggak kepikiran begini? ${C}. Nah, ini jawabannya.`,"relatable everyday problem moment"],
+ ["Produk",`Kenalin, ${P}. Simpel tapi kepake banget.`,"product reveal, clean framing"],
+ ["Detail",`Yang bikin beda: kualitasnya oke dan harganya ramah kantong.`,"detail shot of key feature"],
+ ["Hasil",`Hasilnya bisa kamu lihat sendiri, praktis dan rapi.`,"satisfying before/after result"],
+ ["Ajakan",`Link Shopee ada di bio, buka Milkshake aku. Cek sebelum kehabisan!`,"product hero shot with space for text overlay"]];
+ const spd=$("#spd").value,lang=$("#lang").value;
+ let all=[];
+ const rows=[];
+ const cards=idx.map((k,i)=>{
+  const t=T[k],cam=cams[i%cams.length];
+  const prompt=`${sty}. ${who}. ${t[2]}. Object: ${obj}. Location: ${loc}. Camera: ${cam}. Aspect ratio ${O.rat[S.rat][1]}, ${per} seconds, natural lighting.`;
+  const vo=voc[0]==="Tanpa suara"?"(teks di layar): "+t[1]:t[1];
+  rows.push([i+1,t[0],per,O.rat[S.rat][1],prompt,vo,fx[i%Math.max(fx.length,1)]?fx[i%fx.length][0]:""]);all.push(`Scene ${i+1} - ${t[0]} (${per} dtk)\nPROMPT: ${prompt}\nVO: ${vo}`);
+  return `<div class="card sc"><h3>Scene ${i+1}: ${t[0]} <small>${per} detik</small></h3>
+  <div class="blk"><b>Prompt video (EN)</b><span>${esc(prompt)}</span></div>
+  <div class="blk"><b>Naskah suara</b>${esc(vo)}</div>
+  <div class="blk"><b>Audio</b>${esc(fx[i%Math.max(fx.length,1)]?fx[i%fx.length][0]:"tanpa efek")}</div>
+  <button class="sm" data-copy="${i}">Salin prompt + naskah</button></div>`}).join("");
+ const th=a=>a.map(u=>`<img src="${u}" alt="">`).join("");
+ const refs=(IMG.model.length&&ai?`<b>Foto model</b><div class="rf">${th(IMG.model)}</div>`:"")+(IMG.prod.length?`<b>Foto produk</b><div class="rf">${th(IMG.prod)}</div>`:"")+((IMG.model.length&&ai)||IMG.prod.length?`<p class="s">Tahan lama pada foto untuk menyimpan, lalu unggah sebagai referensi (image-to-video) di tool video AI bersama prompt tiap scene.</p>`:"");
+ const cap=`${C}\n\nRekomendasi ${P}. Link ada di bio (Milkshake) 🛒 (link affiliate)\n\n#rekomendasishopee #shopeefinds #reviewproduk #racunshopee #kontenkreator`;
+ const meta=`Rasio: ${O.rat[S.rat][0]} · Karakter: ${ai?name+" (AI influencer)":ch[0]} · Suara: ${voc[0]}, ${lang}, ${spd} · Musik: ${mu[0]} · Efek: ${fx.map(f=>f[0]).join(", ")||"-"}`;
+ $("#hasil").innerHTML=`<div class="card"><b>Ringkasan</b><div class="blk">${esc(meta)}</div>
+ <div class="blk"><b>Musik latar (EN)</b>${esc(mu[1])}, tempo sesuai pacing ${esc(spd)}</div>
+ ${refs}<div class="row"><button class="sm" id="cAll">Salin semua</button><button class="sm" id="toCal">Jadwalkan</button><button class="sm" id="csvS">Unduh CSV</button></div></div>${cards}
+ <div class="card"><b>Caption + link bio</b><div class="blk">${esc(cap)}</div><button class="sm" id="cCap">Salin caption</button></div>`;
+ const cp=async t=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove()}};
+ $("#hasil").querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{cp(all[b.dataset.copy]);b.textContent="Tersalin"});
+ $("#csvS").onclick=()=>csv("storyboard.csv",[["Scene","Beat","Durasi(dtk)","Rasio","Prompt","Naskah","Efek"],...rows]);
+ $("#cAll").onclick=e=>{cp(all.join("\n\n"));e.target.textContent="Tersalin"};
+ $("#cCap").onclick=e=>{cp(cap);e.target.textContent="Tersalin"};
+ $("#toCal").onclick=()=>go("kal");
+ if(!quiet)go("hasil");
+}
+$("#gen").onclick=()=>build();
+
+/* Kalender */
+const pad=n=>String(n).padStart(2,"0"),key=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+let view=new Date();view.setDate(1);let sel=null,sched={};
+try{sched=JSON.parse(localStorage.getItem("sk")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("sk",JSON.stringify(sched))}catch(e){}};
+$("#start").value=key(new Date());
+function drawCal(){
+ $("#mon").textContent=view.toLocaleDateString("id-ID",{month:"long",year:"numeric"});
+ const g=$("#grid");g.innerHTML="";
+ ["Sen","Sel","Rab","Kam","Jum","Sab","Min"].forEach(d=>g.insertAdjacentHTML("beforeend",`<div class="h">${d}</div>`));
+ const first=(view.getDay()+6)%7,days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate(),tk=key(new Date());
+ for(let i=0;i<first;i++)g.insertAdjacentHTML("beforeend","<div></div>");
+ for(let d=1;d<=days;d++){
+  const k=`${view.getFullYear()}-${pad(view.getMonth()+1)}-${pad(d)}`,e=sched[k];
+  const b=document.createElement("button");
+  b.className=(e?e.type:"")+(sel===k?" sel":"");if(k===tk)b.setAttribute("aria-current","date");
+  b.innerHTML=`<b>${d}</b>${e?esc((e.type==="ai"?"AI ":"")+(e.title||e.time)):""}`;
+  b.onclick=()=>{sel=k;openEd();drawCal()};g.appendChild(b);
+ }
+}
+function openEd(){
+ const e=sched[sel]||{type:"fl",time:"19:00",title:""};
+ $("#ed").classList.remove("hide");$("#edDate").textContent=new Date(sel+"T00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long"});
+ $("#edType").value=e.type;$("#edTime").value=e.time;$("#edTitle").value=e.title;
+}
+$("#edSave").onclick=()=>{sched[sel]={type:$("#edType").value,time:$("#edTime").value,title:$("#edTitle").value.trim()};save();drawCal()};
+$("#edDel").onclick=()=>{delete sched[sel];save();$("#ed").classList.add("hide");drawCal()};
+$("#edLast").onclick=()=>{if(last)$("#edTitle").value=last};
+$("#prev").onclick=()=>{view.setMonth(view.getMonth()-1);drawCal()};
+$("#next").onclick=()=>{view.setMonth(view.getMonth()+1);drawCal()};
+$("#csvC").onclick=()=>csv("jadwal.csv",[["Tanggal","Jam","Tipe","Judul"],...Object.keys(sched).sort().map(k=>[k,sched[k].time,sched[k].type==="ai"?"AI influencer":"Faceless",sched[k].title])]);
+$("#auto").onclick=()=>{
+ const ev=Math.max(2,parseInt($("#every").value)||2),st=new Date($("#start").value+"T00:00"),days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+ for(let d=1;d<=days;d++){
+  const dt=new Date(view.getFullYear(),view.getMonth(),d),n=Math.round((dt-st)/864e5);
+  if(n<0)continue;const k=key(dt);
+  if(!sched[k])sched[k]={type:n%ev===ev-1?"ai":"fl",time:"19:00",title:""};
+ }
+ save();drawCal();
+};
+
+/* Simpan otomatis di browser */
+function snap(){try{const v={};["concept","prod","aiName","aiLook","objx","locx","lang","spd"].forEach(i=>v[i]=$("#"+i).value);
+ localStorage.setItem("sk_state",JSON.stringify({S,v,IMG,built:!!document.querySelector("#hasil .sc")}))}catch(e){}}
+let tm;window.__l=()=>{clearTimeout(tm);tm=setTimeout(snap,300)};
+["input","change","click"].forEach(ev=>document.addEventListener(ev,window.__l));
+if(SAVED.v)for(const i in SAVED.v){const el=$("#"+i);if(el)el.value=SAVED.v[i]}
+if(SAVED.IMG){IMG.model=SAVED.IMG.model||[];IMG.prod=SAVED.IMG.prod||[];drawPh("model","#pModel");drawPh("prod","#pProd")}
+if(SAVED.built&&$("#concept").value.trim())build(true);
+</script>
+</body>
+</html>
