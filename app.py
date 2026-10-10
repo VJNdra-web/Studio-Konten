@@ -67,16 +67,16 @@ if not st.session_state.logged_in:
                     st.error("Mohon isi Email, Password, dan Gemini API Key dengan lengkap.")
     st.stop()
 
-# --- FUNGSI PEMANGGILAN AI ---
+# --- FUNGSI PEMANGGILAN AI YANG LEBIH STABIL ---
 def generate_ai_response(prompt_text):
     try:
         genai.configure(api_key=st.session_state.gemini_key)
-        # Menggunakan model universal terbaru yang pasti dikenali server API
-        model = genai.GenerativeModel("gemini-flash-latest")
+        # Menggunakan model standar resmi yang paling stabil
+        model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content(prompt_text)
         return response.text
     except Exception as e:
-        return f"Error dari Google API: {str(e)}\n\nCatatan: Pastikan API Key yang Anda masukkan sudah benar dari Google AI Studio."
+        return f"Error dari Google API: {str(e)}"
 
 # --- MENU UTAMA (SIDEBAR) ---
 st.sidebar.title(f"Halo, {st.session_state.user_email.split('@')[0]}! 👋")
