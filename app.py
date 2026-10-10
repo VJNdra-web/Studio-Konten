@@ -68,7 +68,7 @@ if not st.session_state.logged_in:
 
 # --- KONFIGURASI GEMINI API ---
 genai.configure(api_key=st.session_state.gemini_key)
-ai_model = genai.GenerativeModel("gemini-2.5-flash")
+ai_model = genai.GenerativeModel("gemini-1.5-flash")
 
 # --- MENU UTAMA (SIDEBAR) ---
 st.sidebar.title(f"Halo, {st.session_state.user_email.split('@')[0]}! 👋")
