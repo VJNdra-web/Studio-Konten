@@ -32,7 +32,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- SISTEM LOGIN SEDERHANA ---
+# --- INISIALISASI SESSION STATE ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'user_email' not in st.session_state:
@@ -42,6 +42,7 @@ if 'blueprint' not in st.session_state:
 if 'history' not in st.session_state:
     st.session_state.history = []
 
+# --- HALAMAN LOGIN ---
 if not st.session_state.logged_in:
     st.markdown("<h1 style='text-align: center; color: #818cf8;'>🚀 Selamat Datang di ContentOS</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8;'>Platform AI All-in-One untuk Kreator Konten</p>", unsafe_allow_html=True)
@@ -59,16 +60,29 @@ if not st.session_state.logged_in:
                 if email_input and password_input and api_key_input:
                     st.session_state.logged_in = True
                     st.session_state.user_email = email_input
-                    st.session_state.gemini_key = api_key_input
+                    st.session_state.gemini_key = api_key_input.strip()
                     st.success("Login Berhasil!")
                     st.rerun()
                 else:
                     st.error("Mohon isi Email, Password, dan Gemini API Key dengan lengkap.")
     st.stop()
 
-# --- KONFIGURASI GEMINI API ---
-genai.configure(api_key=st.session_state.gemini_key)
-ai_model = genai.GenerativeModel("gemini-1.5-flash")
+# --- FUNGSI PEMANGGILAN AI DENGAN RECOVERY ---
+def generate_ai_response(prompt_text):
+    try:
+        genai.configure(api_key=st.session_state.gemini_key)
+        # Mencoba model flash terlebih dahulu
+        try:
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt_text)
+            return response.text
+        except Exception:
+            # Jika gagal, otomatis switch ke model pro
+            model = genai.GenerativeModel("gemini-1.5-pro")
+            response = model.generate_content(prompt_text)
+            return response.text
+    except Exception as e:
+        return f"Error dari Google API: {str(e)}\n\nCatatan: Pastikan API Key yang Anda masukkan saat Login sudah benar dari Google AI Studio."
 
 # --- MENU UTAMA (SIDEBAR) ---
 st.sidebar.title(f"Halo, {st.session_state.user_email.split('@')[0]}! 👋")
@@ -117,16 +131,17 @@ if menu == "🎯 Assessment & Blueprint":
             3. Unique Value Proposition (UVP)
             4. 3 Content Pillars Utama
             """
-            response = ai_model.generate_content(prompt)
-            st.session_state.blueprint = response.text
+            result_text = generate_ai_response(prompt)
+            st.session_state.blueprint = result_text
             
-            # Simpan ke history
-            st.session_state.history.append({
-                "type": "Master Blueprint",
-                "title": f"Blueprint: {niche}",
-                "content": response.text,
-                "date": datetime.now().strftime("%Y-%m-%d %H:%M")
-            })
+            # Simpan ke history jika berhasil
+            if "Error dari Google API" not in result_text:
+                st.session_state.history.append({
+                    "type": "Master Blueprint",
+                    "title": f"Blueprint: {niche}",
+                    "content": result_text,
+                    "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+                })
             
     if st.session_state.blueprint:
         st.subheader("📋 Hasil Master Blueprint Anda:")
@@ -158,28 +173,27 @@ elif menu == "✍️ Script Builder":
             
         if btn_hook:
             with st.spinner("Membuat Hook memikat..."):
-                res = ai_model.generate_content(f"Buatkan 3 opsi Hook (3 detik pertama) yang sangat memikat untuk ide konten: {ide_konten}")
+                res = generate_ai_response(f"Buatkan 3 opsi Hook (3 detik pertama) yang sangat memikat untuk ide konten: {ide_konten}")
                 st.subheader("🔥 Hasil Hook:")
-                st.write(res.text)
-                st.session_state.history.append({"type": "Script", "title": f"Hook: {ide_konten[:30]}...", "content": res.text, "date": datetime.now().strftime("%Y-%m-%d %H:%M")})
+                st.write(res)
                 
         if btn_foreshadow:
             with st.spinner("Membuat Foreshadow..."):
-                res = ai_model.generate_content(f"Buatkan kalimat Foreshadow/Retention untuk menjaga penonton tetap menonton video tentang: {ide_konten}")
+                res = generate_ai_response(f"Buatkan kalimat Foreshadow/Retention untuk menjaga penonton tetap menonton video tentang: {ide_konten}")
                 st.subheader("🔮 Hasil Foreshadow:")
-                st.write(res.text)
+                st.write(res)
                 
         if btn_body:
             with st.spinner("Menyusun isi konten..."):
-                res = ai_model.generate_content(f"Buatkan poin-poin isi video/skrip yang padat, bernilai tinggi, dan mudah dipahami untuk ide: {ide_konten}")
+                res = generate_ai_response(f"Buatkan poin-poin isi video/skrip yang padat, bernilai tinggi, dan mudah dipahami untuk ide: {ide_konten}")
                 st.subheader("📝 Hasil Isi Konten:")
-                st.write(res.text)
+                st.write(res)
                 
         if btn_cta:
             with st.spinner("Membuat CTA..."):
-                res = ai_model.generate_content(f"Buatkan 3 kalimat Call to Action (CTA) interaktif agar penonton komen/follow untuk video tentang: {ide_konten}")
+                res = generate_ai_response(f"Buatkan 3 kalimat Call to Action (CTA) interaktif agar penonton komen/follow untuk video tentang: {ide_konten}")
                 st.subheader("📢 Hasil CTA:")
-                st.write(res.text)
+                st.write(res)
 
 # ==========================================
 # 3. VIDEO TO SCRIPT
@@ -198,10 +212,9 @@ elif menu == "🎬 Video to Script":
                 
                 Uraikan struktur suksesnya (Hook, Pola Penyampaian, dan CTA) lalu buatkan versi skrip baru yang lebih segar dan orisinal berdasarkan struktur tersebut!
                 """
-                res = ai_model.generate_content(prompt)
+                res = generate_ai_response(prompt)
                 st.subheader("✨ Hasil Konversi Skrip:")
-                st.write(res.text)
-                st.session_state.history.append({"type": "Video to Script", "title": "Konversi Dari Referensi", "content": res.text, "date": datetime.now().strftime("%Y-%m-%d %H:%M")})
+                st.write(res)
         else:
             st.warning("Mohon masukkan teks transkrip terlebih dahulu.")
 
