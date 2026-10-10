@@ -72,7 +72,7 @@ def generate_ai_response(prompt_text):
     try:
         genai.configure(api_key=st.session_state.gemini_key)
         # Menggunakan model standar resmi yang paling stabil
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content(prompt_text)
         return response.text
     except Exception as e:
